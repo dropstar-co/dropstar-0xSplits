@@ -6,31 +6,32 @@
 const hre = require('hardhat')
 const fs = require('fs')
 
-const fetch = require('node-fetch')
-
 const {
-  GUTTO_SERTA_ADDRESS,
-  ERALP_ORKUN_CIHAN_ADDRESS,
+  GUTTO_SERTA_VENLY_ADDRESS,
+  ERALP_ORKUN_CIHAN_VENLY_ADDRESS,
   DROPSTAR_ADDRESS,
+  SPLIT_MAIN_ADDRESS,
 } = require('../.env.js')
+
+const { getSplitParameters } = require('./utils/splits')
+
+console.log({ getSplitParameters })
 
 async function main() {
   const [deployer] = await ethers.getSigners()
 
-  const splitMainAddress = '0x2ed6c4B5dA6378c7897AC67Ba9e43102Feb694EE'
-
-  const splitMain = await ethers.getContractAt('SplitMain', splitMainAddress)
+  const splitMain = await ethers.getContractAt('SplitMain', SPLIT_MAIN_ADDRESS)
   await splitMain.deployed()
 
   const PERCENTAGE_SCALE = (await splitMain.PERCENTAGE_SCALE()).toString()
 
-  const guttoSertaAddress = GUTTO_SERTA_ADDRESS
+  const guttoSertaAddress = GUTTO_SERTA_VENLY_ADDRESS
   const dropStarAddress = DROPSTAR_ADDRESS
-  const eralpOrkunCihanAddress = ERALP_ORKUN_CIHAN_ADDRESS
+  const eralpOrkunCihanAddress = ERALP_ORKUN_CIHAN_VENLY_ADDRESS
 
   const guttoSertaAllocation = 0.015
-  const dropStarAllocation = 0.005
   const eralpOrkunCihanAllocation = 0.01
+  const dropStarAllocation = 0.005
 
   const fullAllocation =
     guttoSertaAllocation + dropStarAllocation + eralpOrkunCihanAllocation
@@ -90,6 +91,8 @@ async function main() {
   } catch (err) {
     console.log('Split not exists, proceeding to createSplit')
   }
+
+  return
 
   await splitMain.createSplit(
     splitDataAddresses,
