@@ -5,7 +5,7 @@
 // Runtime Environment's members available in the global scope.
 const { SPLIT_MAIN_ADDRESS } = require('../../.env.js')
 
-async function getSplitParameters(artists, weights) {
+async function getSplitParameters(artists, weights, distributorFee) {
   if (artists.length !== weights.length)
     throw 'artists[] and weights[] length do not match'
 
@@ -50,4 +50,30 @@ async function getSplitParameters(artists, weights) {
   }
 }
 
-module.exports = { getSplitParameters }
+async function deploySplitIfNotDeployed(splitConfig, distributorFee) {
+  const { splitWalletAddress, splitDataAddresses, splitDataPercents } =
+    splitConfig
+
+  const splitWallet = await ethers.getContractAt(
+    'SplitWallet',
+    splitWalletAddress,
+  )
+  try {
+    await splitWallet.deployed()
+
+    console.log('Split already created, skipping createSplit')
+    return
+  } catch (err) {
+    console.log('Split not exists, proceeding to createSplit')
+  }
+
+  await splitMain.createSplit(
+    splitDataAddresses,
+    splitDataPercents,
+    distributorFee,
+    ethers.constants.AddressZero,
+  )
+  console.log('   created')
+}
+
+module.exports = { getSplitParameters, deploySplitIfNotDeployed }
