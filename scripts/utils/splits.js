@@ -62,6 +62,9 @@ async function deploySplitIfNotDeployed(splitConfig, distributorFee) {
     console.log('Split not exists, proceeding to createSplit')
   }
 
+  const splitMain = await ethers.getContractAt('SplitMain', SPLIT_MAIN_ADDRESS)
+  await splitMain.deployed()
+
   await splitMain.createSplit(splitDataAddresses, splitDataPercents, distributorFee, ethers.constants.AddressZero)
   console.log('   created')
 }

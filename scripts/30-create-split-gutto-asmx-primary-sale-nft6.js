@@ -21,7 +21,7 @@ async function main() {
 
   console.log(`splitWalletAddress: ${splitConfig.splitWalletAddress}`)
 
-  deploySplitIfNotDeployed(splitConfig, 0)
+  await deploySplitIfNotDeployed(splitConfig, 0)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
