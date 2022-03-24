@@ -73,51 +73,24 @@ library Clones {
     function clone(address implementation) internal returns (address instance) {
         assembly {
             let ptr := mload(0x40)
-            mstore(
-                ptr,
-                0x3d605d80600a3d3981f336603057343d52307f00000000000000000000000000
-            )
-            mstore(
-                add(ptr, 0x13),
-                0x830d2d700a97af574b186c80d40429385d24241565b08a7c559ba283a964d9b1
-            )
-            mstore(
-                add(ptr, 0x33),
-                0x60203da23d3df35b3d3d3d3d363d3d37363d7300000000000000000000000000
-            )
+            mstore(ptr, 0x3d605d80600a3d3981f336603057343d52307f00000000000000000000000000)
+            mstore(add(ptr, 0x13), 0x830d2d700a97af574b186c80d40429385d24241565b08a7c559ba283a964d9b1)
+            mstore(add(ptr, 0x33), 0x60203da23d3df35b3d3d3d3d363d3d37363d7300000000000000000000000000)
             mstore(add(ptr, 0x46), shl(0x60, implementation))
-            mstore(
-                add(ptr, 0x5a),
-                0x5af43d3d93803e605b57fd5bf300000000000000000000000000000000000000
-            )
+            mstore(add(ptr, 0x5a), 0x5af43d3d93803e605b57fd5bf300000000000000000000000000000000000000)
             instance := create(0, ptr, 0x67)
         }
         if (instance == address(0)) revert CreateError();
     }
 
-    function cloneDeterministic(address implementation, bytes32 salt)
-        internal
-        returns (address instance)
-    {
+    function cloneDeterministic(address implementation, bytes32 salt) internal returns (address instance) {
         assembly {
             let ptr := mload(0x40)
-            mstore(
-                ptr,
-                0x3d605d80600a3d3981f336603057343d52307f00000000000000000000000000
-            )
-            mstore(
-                add(ptr, 0x13),
-                0x830d2d700a97af574b186c80d40429385d24241565b08a7c559ba283a964d9b1
-            )
-            mstore(
-                add(ptr, 0x33),
-                0x60203da23d3df35b3d3d3d3d363d3d37363d7300000000000000000000000000
-            )
+            mstore(ptr, 0x3d605d80600a3d3981f336603057343d52307f00000000000000000000000000)
+            mstore(add(ptr, 0x13), 0x830d2d700a97af574b186c80d40429385d24241565b08a7c559ba283a964d9b1)
+            mstore(add(ptr, 0x33), 0x60203da23d3df35b3d3d3d3d363d3d37363d7300000000000000000000000000)
             mstore(add(ptr, 0x46), shl(0x60, implementation))
-            mstore(
-                add(ptr, 0x5a),
-                0x5af43d3d93803e605b57fd5bf300000000000000000000000000000000000000
-            )
+            mstore(add(ptr, 0x5a), 0x5af43d3d93803e605b57fd5bf300000000000000000000000000000000000000)
             instance := create2(0, ptr, 0x67, salt)
         }
         if (instance == address(0)) revert Create2Error();
@@ -133,23 +106,11 @@ library Clones {
     ) internal pure returns (address predicted) {
         assembly {
             let ptr := mload(0x40)
-            mstore(
-                ptr,
-                0x3d605d80600a3d3981f336603057343d52307f00000000000000000000000000
-            )
-            mstore(
-                add(ptr, 0x13),
-                0x830d2d700a97af574b186c80d40429385d24241565b08a7c559ba283a964d9b1
-            )
-            mstore(
-                add(ptr, 0x33),
-                0x60203da23d3df35b3d3d3d3d363d3d37363d7300000000000000000000000000
-            )
+            mstore(ptr, 0x3d605d80600a3d3981f336603057343d52307f00000000000000000000000000)
+            mstore(add(ptr, 0x13), 0x830d2d700a97af574b186c80d40429385d24241565b08a7c559ba283a964d9b1)
+            mstore(add(ptr, 0x33), 0x60203da23d3df35b3d3d3d3d363d3d37363d7300000000000000000000000000)
             mstore(add(ptr, 0x46), shl(0x60, implementation))
-            mstore(
-                add(ptr, 0x5a),
-                0x5af43d3d93803e605b57fd5bf3ff000000000000000000000000000000000000
-            )
+            mstore(add(ptr, 0x5a), 0x5af43d3d93803e605b57fd5bf3ff000000000000000000000000000000000000)
             mstore(add(ptr, 0x68), shl(0x60, deployer))
             mstore(add(ptr, 0x7c), salt)
             mstore(add(ptr, 0x9c), keccak256(ptr, 0x67))

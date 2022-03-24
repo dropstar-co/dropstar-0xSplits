@@ -6,40 +6,22 @@
 const hre = require('hardhat')
 const fs = require('fs')
 
-const {
-  GUTTO_SERTA_VENLY_ADDRESS,
-  ERALP_ORKUN_CIHAN_VENLY_ADDRESS,
-  DROPSTAR_ADDRESS,
-} = require('../.env.js')
+const { GUTTO_SERTA_VENLY_ADDRESS, ERALP_ORKUN_CIHAN_VENLY_ADDRESS, DROPSTAR_ADDRESS } = require('../.env.js')
+const { getSplitParameters, deploySplitIfNotDeployed } = require('./utils/splits')
 
 async function main() {
-  const {
-    getSplitParameters,
-    deploySplitIfNotDeployed,
-  } = require('./utils/splits')
+  const [deployer] = await ethers.getSigners()
 
-  async function main() {
-    const [deployer] = await ethers.getSigners()
+  const distributorFee = 0
+  const artistWallets = [GUTTO_SERTA_VENLY_ADDRESS, ERALP_ORKUN_CIHAN_VENLY_ADDRESS, DROPSTAR_ADDRESS]
+  const artistWeights = [70, 20, 10]
 
-    const distributorFee = 0
-    const artistWallets = [
-      GUTTO_SERTA_VENLY_ADDRESS,
-      ERALP_ORKUN_CIHAN_VENLY_ADDRESS,
-      DROPSTAR_ADDRESS,
-    ]
-    const artistWeights = [70, 20, 10]
+  const splitConfig = await getSplitParameters(artistWallets, artistWeights, distributorFee)
+  console.log({ splitConfig })
 
-    const splitConfig = await getSplitParameters(
-      artistWallets,
-      artistWeights,
-      distributorFee,
-    )
-    console.log({ splitConfig })
+  console.log(`splitWalletAddress: ${splitConfig.splitWalletAddress}`)
 
-    console.log(`splitWalletAddress: ${splitConfig.splitWalletAddress}`)
-
-    deploySplitIfNotDeployed(splitConfig, 0)
-  }
+  deploySplitIfNotDeployed(splitConfig, 0)
 }
 
 // We recommend this pattern to be able to use async/await everywhere

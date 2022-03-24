@@ -100,10 +100,7 @@ interface ISplitMain {
      *  @param split Address of the split control transfer was initiated for
      *  @param newPotentialController Address of the split's new potential controller
      */
-    event InitiateControlTransfer(
-        address indexed split,
-        address indexed newPotentialController
-    );
+    event InitiateControlTransfer(address indexed split, address indexed newPotentialController);
 
     /** @notice emitted after each canceled split control transfer
      *  @param split Address of the split control transfer was canceled for
@@ -115,22 +112,14 @@ interface ISplitMain {
      *  @param previousController Address of the split's previous controller
      *  @param newController Address of the split's new controller
      */
-    event ControlTransfer(
-        address indexed split,
-        address indexed previousController,
-        address indexed newController
-    );
+    event ControlTransfer(address indexed split, address indexed previousController, address indexed newController);
 
     /** @notice emitted after each successful ETH balance split
      *  @param split Address of the split that distributed its balance
      *  @param amount Amount of ETH distributed
      *  @param distributorAddress Address to credit distributor fee to
      */
-    event DistributeETH(
-        address indexed split,
-        uint256 amount,
-        address indexed distributorAddress
-    );
+    event DistributeETH(address indexed split, uint256 amount, address indexed distributorAddress);
 
     /** @notice emitted after each successful ERC20 balance split
      *  @param split Address of the split that distributed its balance
@@ -151,10 +140,5 @@ interface ISplitMain {
      *  @param tokens Addresses of ERC20s withdrawn
      *  @param tokenAmounts Amounts of corresponding ERC20s withdrawn
      */
-    event Withdrawal(
-        address indexed account,
-        uint256 ethAmount,
-        ERC20[] tokens,
-        uint256[] tokenAmounts
-    );
+    event Withdrawal(address indexed account, uint256 ethAmount, ERC20[] tokens, uint256[] tokenAmounts);
 }

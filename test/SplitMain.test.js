@@ -44,9 +44,7 @@ describe('0xSplits', function () {
       },
     ]
 
-    splitData = splitData.sort((a, b) =>
-      a.address.toLowerCase().localeCompare(b.address.toLowerCase()),
-    )
+    splitData = splitData.sort((a, b) => a.address.toLowerCase().localeCompare(b.address.toLowerCase()))
 
     const distributorFee = 0
     const splitDataAddresses = splitData.map((a) => a.address)
@@ -91,13 +89,7 @@ describe('0xSplits', function () {
       splitBalance____1,
     })
 
-    await splitMain.distributeETH(
-      splitAddress,
-      splitDataAddresses,
-      splitDataPercents,
-      distributorFee,
-      deployer.address,
-    )
+    await splitMain.distributeETH(splitAddress, splitDataAddresses, splitDataPercents, distributorFee, deployer.address)
 
     const deployerBalance_2 = await provider.getBalance(deployer.address)
     const splitBalance____2 = await provider.getBalance(splitAddress)

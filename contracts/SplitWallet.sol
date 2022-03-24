@@ -80,11 +80,7 @@ contract SplitWallet {
      *  @param token Token to send
      *  @param amount Amount to send
      */
-    function sendERC20ToMain(ERC20 token, uint256 amount)
-        external
-        payable
-        onlySplitMain
-    {
+    function sendERC20ToMain(ERC20 token, uint256 amount) external payable onlySplitMain {
         token.safeTransfer(address(splitMain), amount);
     }
 }
