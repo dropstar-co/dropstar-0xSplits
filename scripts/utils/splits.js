@@ -48,18 +48,14 @@ async function getSplitParameters(artists, weights, distributorFee) {
 }
 
 async function deploySplitIfNotDeployed(splitConfig, distributorFee) {
-  const splitWalletAddress = splitConfig.splitWalletAddress
-  const splitDataAddresses = splitConfig.splitDataAddresses
-  const splitDataPercents = splitConfig.splitDataPercents
-
+  const { splitWalletAddress, splitDataAddresses, splitDataPercents } = splitConfig
   const splitWallet = await ethers.getContractAt('SplitWallet', splitWalletAddress)
   try {
     await splitWallet.deployed()
-
-    console.log('Split already created, skipping createSplit')
+    console.log(`Split ${splitWalletAddress} already created, skipping createSplit`)
     return
   } catch (err) {
-    console.log('Split not exists, proceeding to createSplit')
+    console.log(`Split ${splitWalletAddress} not exists, proceeding to createSplit`)
   }
 
   const splitMain = await ethers.getContractAt('SplitMain', SPLIT_MAIN_ADDRESS)
