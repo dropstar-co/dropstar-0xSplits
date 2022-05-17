@@ -3,7 +3,10 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
+const { ethers } = require('hardhat')
 const { SPLIT_MAIN_ADDRESS } = require('../../.env.js')
+
+const distributorFee = 0
 
 async function getSplitParameters(artists, weights, distributorFee) {
   if (artists.length !== weights.length) throw 'artists[] and weights[] length do not match'
@@ -65,4 +68,47 @@ async function deploySplitIfNotDeployed(splitConfig, distributorFee) {
   console.log('   created')
 }
 
-module.exports = { getSplitParameters, deploySplitIfNotDeployed }
+async function checkBalanceAndPullItToWallets(splitConfig) {
+  const { splitWalletAddress, splitDataAddresses, splitDataPercents } = splitConfig
+
+  console.log(`splitWalletAddress = ${splitWalletAddress}`)
+
+  const { provider } = ethers
+  const balance = (await provider.getBalance(splitWalletAddress)).toString()
+
+  const splitMain = await ethers.getContractAt('SplitMain', SPLIT_MAIN_ADDRESS)
+  await splitMain.deployed()
+
+  if (balance !== '0' || balance !== '1') {
+    console.log(`     there is balance ${balance}`)
+
+    /*
+    await splitMain.distributeETH(
+      splitWalletAddress,
+      splitDataAddresses,
+      splitDataPercents,
+      distributorFee,
+      ethers.constants.AddressZero,
+    )
+    console.log('       distributed')
+    */
+  }
+
+  let i
+  for (i = 0; i < splitDataAddresses.length; i++) {
+    const account = splitDataAddresses[i]
+    const accountBalance = (await splitMain.getETHBalance(account)).toString()
+    console.log(`account ${account} balance ${accountBalance}`)
+
+    /*
+    if (accountBalance !== '0' || accountBalance !== '1') {
+      console.log('  there is balance')
+
+      await splitMain.withdraw(account, accountBalance, [])
+      console.log('       withdrawn')
+    }
+    */
+  }
+}
+
+module.exports = { getSplitParameters, deploySplitIfNotDeployed, checkBalanceAndPullItToWallets }

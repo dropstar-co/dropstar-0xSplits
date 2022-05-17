@@ -8,7 +8,7 @@ const fs = require('fs')
 
 const { GUTTO_SERTA_VENLY_ADDRESS, ERALP_ORKUN_CIHAN_VENLY_ADDRESS, DROPSTAR_ADDRESS } = require('../.env.js')
 
-const { getSplitParameters, deploySplitIfNotDeployed } = require('./utils/splits')
+const { getSplitParameters, deploySplitIfNotDeployed, checkBalanceAndPullItToWallets } = require('./utils/splits')
 
 async function main() {
   const [deployer] = await ethers.getSigners()
@@ -34,6 +34,8 @@ async function main() {
   await deploySplitIfNotDeployed(splitConfigPSONFT1to4, 0)
   await deploySplitIfNotDeployed(splitConfigPSONFT5, 0)
   await deploySplitIfNotDeployed(splitConfigPSONFT6, 0)
+
+  await checkBalanceAndPullItToWallets(splitConfigPSONFT1to4)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
